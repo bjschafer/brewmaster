@@ -13,19 +13,16 @@
 # 
 ###############################################################################
 
-import re
 import subprocess
+import sys
 import yaml
 
-class LogFile():
-
-	def __init__(self, loc):
-		self.location = loc
-		with open(self.location, 'a') as :
-
-
 def get_config():
-	config_file = sys.argv[0]
+	try:
+		config_file = sys.argv[1]
+	except IndexError:
+		print("Please give me a config file path!")
+		sys.exit(0)
 
 	with open(config_file, 'r') as conf:
 		return yaml.load(conf)
@@ -57,7 +54,7 @@ if __name__ == '__main__':
 	for formula in get_config()['formulae']:
 		name = formula['name']
 		version = formula['name']
-		args[]
+		args = []
 		try:
 			args = formula['args']
 		except:
@@ -67,19 +64,11 @@ if __name__ == '__main__':
 			call_brew(['install', name, args if args.size > 0 else ''])
 			
 			call_brew(['pin', name])
-			status = subprocess.call(['brew', 'pin', name])
-			if status != 0:
-				print("Hey, something's up with " + name)
 
-		elif version == 'latest'
-			status = subprocess.call(['brew', name, args if args.size > 0 else ''])
-			if status != 0:
-				print("Hey, something's up with " + name)
+		elif version == 'latest':
+			call_brew(['install', name, args if args.size > 0 else ''])
 
 		else:
-			status = subprocess.call(['brew', name, args if args.size > 0 else ''])
-			if status != 0:
-				print("Hey, something's up with " + name)
-			status = subprocess.call(['brew', 'pin', name])
-			if status != 0:
-				print("Hey, something's up with " + name)
+			call_brew(['install', name, args if args.size > 0 else ''])
+			
+			call_brew(['pin', name])
