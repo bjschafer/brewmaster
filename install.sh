@@ -16,7 +16,6 @@
 OPTIND=1
 
 SYS=$(uname -s)
-HOME=$(eval ~)
 
 function install_homebrew()
 {
@@ -25,11 +24,12 @@ function install_homebrew()
 	else
 		if [ SYS == "Darwin" ]; then
 			ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" # note this prompts the user
-		elif [SYS == "Linux" ]; then
+		elif [ SYS == "Linux" ]; then
 			if hash ruby 2>/dev/null && hash gcc 2>/dev/null; then
 				ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)"
 			else
 				echo "Please install ruby and gcc using your distribution's package manager and try again."
+				exit 4
 			fi
 		else
 			echo "Brewmaster is not supported on your SYStem since Homebrew isn't supported!"
@@ -43,7 +43,13 @@ function install_xcodeTools()
 	if hash gcc 2>/dev/null; then
 		return 1
 	else
-		xcode-select --install
+		if [ SYS == "Darwin" ]; then
+			xcode-select --install
+		else
+			echo "Missing developer tools. Try a sudo apt-get install build-essential"
+			exit 4
+		fi
+	fi
 }
 
 function install_brewmaster()
@@ -58,7 +64,7 @@ function install_brewmaster()
 
 		cp com.bjschafer.brewmaster.plist $HOME/Library/LaunchAgents
 		launchctl load $HOME/Library/LaunchAgents
-	elif [ SYS == "Linux" ]; then
+	else
 		mkdir -p $HOME/.linuxbrew/brewmaster/bin
 		cp bin/brewmaster.py $HOME/.linuxbrew/brewmaster/bin
 
@@ -72,6 +78,15 @@ if [ $(id -u) -eq 0 ]; then
 	exit 3
 fi
 
+echo "Running install..."
+echo "Installing Homebrew if it isn't installed..."
 install_homebrew
+
+echo "Installing command line developer utilities if they aren't installed..."
 install_xcodeTools
+
+echo $HOME
+
+echo "FINALLY!"
+echo "Installing Brewmaster!"
 install_brewmaster
