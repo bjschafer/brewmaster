@@ -1,10 +1,12 @@
-formulae:
+---
+formulae: 
         - name: cask
-        version: 0.53.3
-        args: [arg1, arg2]
+          version: 0.53.1
+          args: [arg1, arg2]
 
-        -name: wget
-        version: latest
+        - name: wget
+          version: latest
 
-        -name: cmake
-        version: current
+        - name: cmake
+          version: current
+...
