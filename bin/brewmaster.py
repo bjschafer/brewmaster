@@ -35,7 +35,8 @@ def call_brew(args):
 		args = args.split(' ')
 	except AttributeError:
 		pass # it's already how we expect it to be
-	status = subprocess.call(['brew'] + args)
+	print(args)
+	status = subprocess.call((['brew'] + args))
 	if status != 0: # Something done goofed.
 		print("Something went wrong with brew. Here are the args:\n" + args)
 
@@ -44,10 +45,10 @@ if __name__ == '__main__':
 	conf = get_config()
 	check_setup(conf)
 
-	call_brew(update)
+	call_brew('update')
 
 	# Update out of date packages that may be updated.
-	call_brew(upgrade)
+	call_brew('upgrade')
 
 	# Let's install what we came here for
 
@@ -61,14 +62,14 @@ if __name__ == '__main__':
 			args = []
 
 		if version == 'current':
-			call_brew(['install', name, args if args.size > 0 else ''])
+			call_brew(['install', name,  ' '.join(args)])
 			
 			call_brew(['pin', name])
 
 		elif version == 'latest':
-			call_brew(['install', name, args if args.size > 0 else ''])
+			call_brew(['install', name, ' '.join(args)])
 
 		else:
-			call_brew(['install', name, args if args.size > 0 else ''])
+			call_brew(['install', name, ' '.join(args)])
 			
 			call_brew(['pin', name])
