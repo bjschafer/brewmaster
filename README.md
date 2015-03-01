@@ -1,6 +1,6 @@
 Brewmaster is still under heavy development! Don't use it unless you like broken things :)
 
-YES it works with Linuxbrew
+YES it works with Linuxbrew.
 
 Why?
 ----
@@ -10,7 +10,7 @@ But seriously, Homebrew is a fantastic thing. Why shouldn't enterprises or peopl
 
 Installation
 ------------
-First, please edit `com.bjschafer.brewmaster.plist` and add after the command name the FULL PATH to your YAML config file.
+First, please edit `com.bjschafer.brewmaster.plist` and add after the command name the FULL PATH to your YAML config file.  You may want to put it in `/usr/local/brewmaster/` on Mac or `~/.linuxbrew/brewmaster/` on Linux, as that directory belongs to Brewmaster.
 
 Then, you should just be able to run `./install.sh` and it'll figure itself out.
 
