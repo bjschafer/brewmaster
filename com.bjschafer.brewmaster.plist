@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.bjschafer.brewmaster</string>
+    <key>OnDemand</key>
+    <true/>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>Program</key>
+    <string>python3 /usr/local/bin/brewmaster/brewmaster.py</string>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>12</integer>
+        <key>Minute</key>
+        <integer>03</integer>
+    </dict>
+</dict>
+</plist>
