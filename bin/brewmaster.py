@@ -35,7 +35,6 @@ def call_brew(args):
 		args = args.split(' ')
 	except AttributeError:
 		pass # it's already how we expect it to be
-	print(args)
 	status = subprocess.call((['brew'] + args))
 	if status != 0: # Something done goofed.
 		print("Something went wrong with brew. Here are the args:\n" + args)

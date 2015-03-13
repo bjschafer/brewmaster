@@ -73,6 +73,45 @@ function install_brewmaster()
 
 }
 
+# TODO: Check filepath
+function find_local_config()
+{
+	config_type="local"
+	read -e -p "Please enter the path to the .yaml file: " -i "/usr/local/brewmaster/config.yaml" config_location
+}
+
+
+# TODO: Check repo format
+# Guess if it's not local we gotta clone it somewhere and create ANOTHER (?) scheduled task to keep it up to date?? Or just use the same one somehow?
+function find_git_config()
+{
+	config_type="git"
+	read -e -p "Please enter the git repository location: " config_location
+}
+
+#TODO: Check URL format
+function find_http_config()
+{
+	config_type="http"
+	read -e -p "Please enter the URL: " config_location
+}
+
+function get_config()
+{
+	if [ $1 ]; then
+		source $1
+	else
+		# Guess we have to do this the hard way.
+		echo "Where is your config stored?"
+		select lgh in "Locally" "Git" "HTTP"; do
+			case $lgh in
+				Locally ) find_local_config; break;;
+				Git ) find_git_config; break;;
+				HTTP ) find_http_config; break;;
+			esac
+		done
+}
+
 if [ $(id -u) -eq 0 ]; then
 	echo "You shouldn't be running this as root."
 	exit 3
@@ -84,8 +123,6 @@ install_homebrew
 
 echo "Installing command line developer utilities if they aren't installed..."
 install_xcodeTools
-
-echo $HOME
 
 echo "FINALLY!"
 echo "Installing Brewmaster!"

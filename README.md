@@ -24,6 +24,10 @@ Next, I'd like to integrate fully with `brew cask` to be able to manage _all_ ap
 
 Finally, why not integrate with actual system configuration?  Then all you have to do on an new system is install brewmaster and you're set!
 
+Other Misc Thoughts
+-------------------
+Hierarchical config files - have one managed globally by the administrator but if the user is a developer and wants his own packages to be managed (automatically pinned/installed/etc), let them specify that.  Of course the global config takes precedence.
+
 YAML file format
 ----------------
 
