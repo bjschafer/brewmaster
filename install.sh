@@ -52,27 +52,69 @@ function install_xcodeTools()
 	fi
 }
 
-# TODO: Check filepath
 function find_local_config()
 {
 	config_type="local"
-	read -e -p "Please enter the path to the .yaml file: " -i "/usr/local/brewmaster/config.yaml" config_location
+
+	if [ $SYS == "Darwin" ]; then
+		read -e -p "Please enter the path to the .yaml file: " -i "/usr/local/brewmaster/config.yaml" config_location
+	else
+		read -e -p "Please enter the path to the .yaml file: " -i "$HOME/.linuxbrew/brewmaster/config.yaml" config_location
+	fi
+
+	if [ ! -e $config_location ]; then
+		echo 
+		read -p "File not found. Please ensure the config file is there and you have permissions, then press enter to try again."
+		if [ ! -e $config_location ]; then
+			echo "File not found. Exiting."
+			exit 1
+		fi
+	fi
+
 }
 
-
-# TODO: Check repo format
-# Guess if it's not local we gotta clone it somewhere and create ANOTHER (?) scheduled task to keep it up to date?? Or just use the same one somehow?
+# Guess we gotta create ANOTHER (?) scheduled task to keep it up to date?? Or just use the same one somehow?
+# Assumes that the config file is stored in config.yaml inside the repo.
 function find_git_config()
 {
 	config_type="git"
-	read -e -p "Please enter the git repository location: " config_location
+	read -e -p "Please enter the git repository location: " git_repo
+
+	if [ $SYS == "Darwin" ]; then
+		config_location="/usr/local/brewmaster/"
+	else
+		config_location="$HOME/.linuxbrew/brewmaster/"
+	fi
+
+	# Let's just let git handle verification, should generally be safe (?)
+	git clone $git_repo $config_location
+	repo_name=$(basename $git_repo .git)
+	config_location="$config_location/$repo_name/config.yaml"
 }
 
-#TODO: Check URL format
 function find_http_config()
 {
 	config_type="http"
-	read -e -p "Please enter the URL: " config_location
+	read -e -p "Please enter the URL: " url_repo
+
+	echo $config_location | grep -E -q 'http[s]*:\/\/([A-Za-z0-9]+\.)+[A-Za-z]+[\/\w\.\?=]*'
+	if [ $? -ne 0 ]; then # not a valid url
+		echo "Invalid URL. Try again."
+		find_http_config
+	fi
+
+	# if they want a URL, let's store it locally where we please
+	if [ $SYS == "Darwin" ]; then
+		config_location="/usr/local/brewmaster/config.yaml"
+	else
+		config_location="$HOME/.linuxbrew/brewmaster/config.yaml"
+	fi
+
+	curl -output $config_location $url_repo
+	if [ $? -ne 0]; then # unable to access
+		echo "Try again?"
+		find_http_config
+	fi
 }
 
 function get_config()
