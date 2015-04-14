@@ -41,7 +41,7 @@ function install_homebrew()
 function install_xcodeTools()
 {
 	if hash gcc 2>/dev/null; then
-		return 1
+		return 0
 	else
 		if [ $SYS == "Darwin" ]; then
 			xcode-select --install
@@ -81,15 +81,17 @@ function find_git_config()
 	read -e -p "Please enter the git repository location: " git_repo
 
 	if [ $SYS == "Darwin" ]; then
-		config_location="/usr/local/brewmaster/"
+		config_base="/usr/local/brewmaster/"
 	else
-		config_location="$HOME/.linuxbrew/brewmaster/"
+		config_base="$HOME/.linuxbrew/brewmaster/"
 	fi
 
 	# Let's just let git handle verification, should generally be safe (?)
 	git clone $git_repo $config_location
 	repo_name=$(basename $git_repo .git)
-	config_location="$config_location/$repo_name/config.yaml"
+	config_location="$config_base/$repo_name/config.yaml"
+
+	sed -i -e "s,UPDATE_CALL,cd $config_base/$repo_name && git pull,g" com.bjschafer.brewmaster.sync.plist
 }
 
 function find_http_config()
@@ -115,6 +117,8 @@ function find_http_config()
 		echo "Try again?"
 		find_http_config
 	fi
+
+	sed -i -e "s,UPDATE_CALL,curl -silent -output $config_location $url_repo,g" com.bjschafer.brewmaster.sync.plist
 }
 
 function get_config()
@@ -138,18 +142,33 @@ function install_brewmaster()
 {
 	sed -i -e "s,CONFIG_LOCATION,$config_location,g" com.bjschafer.brewmaster.plist
 	if ! hash python3 2>/dev/null; then
-		brew install python3
+		if [ $SYS == "Darwin" ]; then
+			brew install python3
+		else
+			echo "Please install Python 3 from your distribution's package manager."
+			exit 1
+		fi
 	fi
 	
 	if [ $SYS == "Darwin" ]; then
 		mkdir -p /usr/local/brewmaster/bin
-		cp bin/brewmaster.py /usr/local/brewmaster/bin
+		cp bin/brewmaster.sh /usr/local/brewmaster/bin
 
 		cp com.bjschafer.brewmaster.plist $HOME/Library/LaunchAgents
 		launchctl load $HOME/Library/LaunchAgents/com.bjschafer.brewmaster.plist
+
+		if [ $config_type == "http" ] || [ $config_type == "git" ]; then
+			cp com.bjschafer.brewmaster.sync.plist $HOME/Library/LaunchAgents
+			launchctl load $HOME/Library/LaunchAgents/com.bjschafer.brewmaster.sync.plist
+		fi
 	else
 		mkdir -p $HOME/.linuxbrew/brewmaster/bin
-		cp bin/brewmaster.py $HOME/.linuxbrew/brewmaster/bin
+		cp bin/brewmaster.sh $HOME/.linuxbrew/brewmaster/bin
+
+		if [ $config_type == "http" ] || [ $config_type == "git" ]; then
+			cat <(crontab -l) <(echo "12 30 * * * $HOME/.linuxbrew/brewmaster/bin/brewmaster.py") | crontab -
+		fi
+
 
 		cat <(crontab -l) <(echo "12 31 * * * $HOME/.linuxbrew/brewmaster/bin/brewmaster.py") | crontab -
 	fi

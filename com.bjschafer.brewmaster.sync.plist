@@ -9,13 +9,13 @@
     <key>RunAtLoad</key>
     <false/>
     <key>Program</key>
-    <string>/usr/local/bin/brewmaster/brewmaster.sh CONFIG_LOCATION</string>
+    <string>UPDATE_CALL</string>
     <key>StartCalendarInterval</key>
     <dict>
         <key>Hour</key>
         <integer>12</integer>
         <key>Minute</key>
-        <integer>03</integer>
+        <integer>01</integer>
     </dict>
 </dict>
 </plist>
