@@ -5,7 +5,7 @@
 # 
 # Usage: ./brewmaster.sh /path/to/config.yaml
 #
-#  Homepage: https://github.com/bjschafer/brewmaster
+#  Homepage: http://bjschafer.github.io/brewmaster
 #
 #    Author: Braxton Schafer <braxton.schafer@gmail.com> (bjs)
 #

@@ -6,7 +6,7 @@
 # Usage: ruby get_yaml.rb /path/to/config.yaml => outputs number of formulae in file
 # 		 ruby get_yaml.rb /path/to/config.yaml [0-9]+ [(name)(version)(args)] => outputs info from each formula
 #
-#  Homepage: https://github.com/bjschafer/brewmaster
+#  Homepage: http://bjschafer.github.io/brewmaster
 #
 #    Author: Braxton Schafer <braxton.schafer@gmail.com> (bjs)
 #

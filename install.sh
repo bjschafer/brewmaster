@@ -4,9 +4,9 @@
 # Installs brewmaster and sets it up to run automatically at login
 # FOR THE CURRENT USER.
 # 
-# Usage: ./install.sh 
+#     Usage: ./install.sh 
 #
-#  Homepage: https://github.com/bjschafer/brewmaster
+#  Homepage: http://bjschafer.github.io/brewmaster
 #
 #    Author: Braxton Schafer <braxton.schafer@gmail.com> (bjs)
 #
