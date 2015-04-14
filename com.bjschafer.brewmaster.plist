@@ -9,7 +9,7 @@
     <key>RunAtLoad</key>
     <false/>
     <key>Program</key>
-    <string>python3 /usr/local/bin/brewmaster/brewmaster.py</string>
+    <string>python3 /usr/local/bin/brewmaster/brewmaster.py CONFIG_LOCATION</string>
     <key>StartCalendarInterval</key>
     <dict>
         <key>Hour</key>

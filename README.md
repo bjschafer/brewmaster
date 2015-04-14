@@ -1,3 +1,5 @@
+[![Join the chat at https://gitter.im/bjschafer/brewmaster](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bjschafer/brewmaster?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Brewmaster is still under heavy development! Don't use it unless you like broken things :)
 
 YES it works with Linuxbrew.
@@ -5,7 +7,6 @@ YES it works with Linuxbrew.
 Why?
 ----
 
-[![Join the chat at https://gitter.im/bjschafer/brewmaster](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bjschafer/brewmaster?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Why not?
 
 But seriously, Homebrew is a fantastic thing. Why shouldn't enterprises or people with multiple computers take advantage of it?  This way, all you need is this small program and a file which declares the things you want.  It's super easy to set up a new system - Brewmaster will even install Homebrew and its dependencies for you!
