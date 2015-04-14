@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Brewmaster by bjschafer</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Brewmaster</h1>
+        <h2>System managment using Homebrew</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/bjschafer/brewmaster/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/bjschafer/brewmaster/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/bjschafer/brewmaster" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <p><a href="https://gitter.im/bjschafer/brewmaster?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/bjschafer/brewmaster"></a></p>
+
+<p>Brewmaster is still under heavy development! Don't use it unless you like broken things :)</p>
+
+<p>YES it works with Linuxbrew.</p>
+
+<h2>
+<a id="why" class="anchor" href="#why" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why?</h2>
+
+<p>Why not?</p>
+
+<p>But seriously, Homebrew is a fantastic thing. Why shouldn't enterprises or people with multiple computers take advantage of it?  This way, all you need is this small program and a file which declares the things you want.  It's super easy to set up a new system - Brewmaster will even install Homebrew and its dependencies for you!</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Have the path to your YAML config file handy - the installer will want it.  You may want to put it in <code>/usr/local/brewmaster/</code> on Mac or <code>~/.linuxbrew/brewmaster/</code> on Linux, as that directory belongs to Brewmaster.</p>
+
+<p>Then, you should just be able to run <code>./install.sh</code> and it'll figure itself out.</p>
+
+<h2>
+<a id="goals" class="anchor" href="#goals" aria-hidden="true"><span class="octicon octicon-link"></span></a>Goals</h2>
+
+<p>First, make the things work.</p>
+
+<p>Then, set it up to automatically keep its config up to date (using <code>git</code> of course) with your master config - one config location, many computers.</p>
+
+<p>Next, I'd like to integrate fully with <code>brew cask</code> to be able to manage <em>all</em> applications and not just developer tools.</p>
+
+<p>Finally, why not integrate with actual system configuration?  Then all you have to do on an new system is install brewmaster and you're set!</p>
+
+<h2>
+<a id="other-misc-thoughts" class="anchor" href="#other-misc-thoughts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Other Misc Thoughts</h2>
+
+<p>Hierarchical config files - have one managed globally by the administrator but if the user is a developer and wants his own packages to be managed (automatically pinned/installed/etc), let them specify that.  Of course the global config takes precedence.</p>
+
+<h2>
+<a id="yaml-file-format" class="anchor" href="#yaml-file-format" aria-hidden="true"><span class="octicon octicon-link"></span></a>YAML file format</h2>
+
+<div class="highlight highlight-yaml"><pre><span class="pl-s">-<span class="pl-s">--</span></span>
+<span class="pl-s"><span class="pl-ent">formulae:</span> </span>
+        <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">cask</span></span>
+          <span class="pl-s"><span class="pl-ent">version:</span> <span class="pl-s">0.53.1</span></span>
+          <span class="pl-s"><span class="pl-ent">args:</span> <span class="pl-s">[arg1, arg2]</span></span>
+
+        <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">wget</span></span>
+          <span class="pl-s"><span class="pl-ent">version:</span> <span class="pl-s">latest</span></span>
+
+        <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s">cmake</span></span>
+          <span class="pl-s"><span class="pl-ent">version:</span> <span class="pl-s">current</span></span>
+...
+</pre></div>
+
+<p>Note that you can specify a specific version which will be <code>brew pin</code>ed, <code>latest</code> which always installs the latest version available, or <code>current</code>, which <code>brew pin</code>s whichever version is available currently.</p>
+
+<p>Right now the manual version specification isn't implemented, so I recommend using <code>current</code>.</p>
+      </section>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-61866633-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
