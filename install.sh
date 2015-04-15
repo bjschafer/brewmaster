@@ -57,9 +57,17 @@ function find_local_config()
 	config_type="local"
 
 	if [ $SYS == "Darwin" ]; then
-		read -e -p "Please enter the path to the .yaml file: " -i "/usr/local/brewmaster/config.yaml" config_location
+		read -e -p "Please enter the path to the .yaml file: [/usr/local/brewmaster/config.yaml]" config_location
 	else
-		read -e -p "Please enter the path to the .yaml file: " -i "$HOME/.linuxbrew/brewmaster/config.yaml" config_location
+		read -e -p "Please enter the path to the .yaml file: [$HOME/.linuxbrew/brewmaster/config.yaml]" config_location
+	fi
+
+	if [ $config_location == "" ]; then
+		if [ $SYS == "Darwin" ]; then
+			config_location="/usr/local/brewmaster/config.yaml"
+		else
+			config_location="$HOME/.linuxbrew/brewmaster/config.yaml"
+		fi
 	fi
 
 	if [ ! -e $config_location ]; then
@@ -141,14 +149,6 @@ function get_config()
 function install_brewmaster()
 {
 	sed -i -e "s,CONFIG_LOCATION,$config_location,g" com.bjschafer.brewmaster.plist
-	if ! hash python3 2>/dev/null; then
-		if [ $SYS == "Darwin" ]; then
-			brew install python3
-		else
-			echo "Please install Python 3 from your distribution's package manager."
-			exit 1
-		fi
-	fi
 	
 	if [ $SYS == "Darwin" ]; then
 		mkdir -p /usr/local/brewmaster/bin
