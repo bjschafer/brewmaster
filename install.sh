@@ -17,10 +17,16 @@ OPTIND=1
 
 SYS=$(uname -s)
 
+if [ $SYS == "Darwin" ]; then
+	brewmaster_home="/usr/local/brewmaster"
+elif [ $SYS == "Linux" ]; then
+	brewmaster_home="$HOME/.linuxbrew/brewmaster"
+fi
+
 function install_homebrew()
 {
 	if hash brew 2>/dev/null; then
-		return 1
+		return 0
 	else
 		if [ $SYS == "Darwin" ]; then
 			ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" # note this prompts the user
@@ -56,18 +62,10 @@ function find_local_config()
 {
 	config_type="local"
 
-	if [ $SYS == "Darwin" ]; then
-		read -e -p "Please enter the path to the .yaml file: [/usr/local/brewmaster/config.yaml]" config_location
-	else
-		read -e -p "Please enter the path to the .yaml file: [$HOME/.linuxbrew/brewmaster/config.yaml]" config_location
-	fi
+		read -e -p "Please enter the path to the .yaml file: [$brewmaster_home/config.yaml]" config_location
 
 	if [ $config_location == "" ]; then
-		if [ $SYS == "Darwin" ]; then
-			config_location="/usr/local/brewmaster/config.yaml"
-		else
-			config_location="$HOME/.linuxbrew/brewmaster/config.yaml"
-		fi
+		config_location="$brewmaster_home/config.yaml"
 	fi
 
 	if [ ! -e $config_location ]; then
@@ -88,37 +86,27 @@ function find_git_config()
 	config_type="git"
 	read -e -p "Please enter the git repository location: " git_repo
 
-	if [ $SYS == "Darwin" ]; then
-		config_base="/usr/local/brewmaster/"
-	else
-		config_base="$HOME/.linuxbrew/brewmaster/"
-	fi
-
 	# Let's just let git handle verification, should generally be safe (?)
 	git clone $git_repo $config_location
 	repo_name=$(basename $git_repo .git)
-	config_location="$config_base/$repo_name/config.yaml"
+	config_location="$brewmaster_home/$repo_name/config.yaml"
 
-	sed -i -e "s,UPDATE_CALL,cd $config_base/$repo_name && git pull,g" com.bjschafer.brewmaster.sync.plist
+	sed -i -e "s,UPDATE_CALL,cd $brewmaster_home/$repo_name && git pull,g" com.bjschafer.brewmaster.sync.plist
 }
 
 function find_http_config()
 {
 	config_type="http"
-	read -e -p "Please enter the URL: " url_repo
+	read -e -p "Please enter the URL in the format http[s]://example.com/config.yaml: " url_repo
 
-	echo $config_location | grep -E -q 'http[s]*:\/\/([A-Za-z0-9]+\.)+[A-Za-z]+[\/\w\.\?=]*'
+	echo $config_location | grep -E -q 'http[s]?:\/\/([A-Za-z0-9]+\.)+[A-Za-z]+[\/\w\.\?=]*'
 	if [ $? -ne 0 ]; then # not a valid url
 		echo "Invalid URL. Try again."
 		find_http_config
 	fi
 
 	# if they want a URL, let's store it locally where we please
-	if [ $SYS == "Darwin" ]; then
-		config_location="/usr/local/brewmaster/config.yaml"
-	else
-		config_location="$HOME/.linuxbrew/brewmaster/config.yaml"
-	fi
+	config_location="$brewmaster_home/config.yaml"
 
 	curl -output $config_location $url_repo
 	if [ $? -ne 0]; then # unable to access
@@ -141,6 +129,7 @@ function get_config()
 				Locally ) find_local_config; break;;
 				Git ) find_git_config; break;;
 				HTTP ) find_http_config; break;;
+				* ) echo "Invalid."; exit 1; break;; # should do this better
 			esac
 		done
 	fi
@@ -150,10 +139,10 @@ function install_brewmaster()
 {
 	sed -i -e "s,CONFIG_LOCATION,$config_location,g" com.bjschafer.brewmaster.plist
 	
-	if [ $SYS == "Darwin" ]; then
-		mkdir -p /usr/local/brewmaster/bin
-		cp bin/brewmaster.sh /usr/local/brewmaster/bin
+	mkdir -p "$brewmaster_home/bin"
+	cp bin/brewmaster.sh "$brewmaster_home/bin"
 
+	if [ $SYS == "Darwin" ]; then
 		cp com.bjschafer.brewmaster.plist $HOME/Library/LaunchAgents
 		launchctl load $HOME/Library/LaunchAgents/com.bjschafer.brewmaster.plist
 
@@ -162,15 +151,12 @@ function install_brewmaster()
 			launchctl load $HOME/Library/LaunchAgents/com.bjschafer.brewmaster.sync.plist
 		fi
 	else
-		mkdir -p $HOME/.linuxbrew/brewmaster/bin
-		cp bin/brewmaster.sh $HOME/.linuxbrew/brewmaster/bin
-
 		if [ $config_type == "http" ] || [ $config_type == "git" ]; then
-			cat <(crontab -l) <(echo "12 30 * * * $HOME/.linuxbrew/brewmaster/bin/brewmaster.py") | crontab -
+			cat <(crontab -l) <(echo "12 30 * * * $brewmaster_home/bin/brewmaster.py") | crontab -
 		fi
 
 
-		cat <(crontab -l) <(echo "12 31 * * * $HOME/.linuxbrew/brewmaster/bin/brewmaster.py") | crontab -
+		cat <(crontab -l) <(echo "12 31 * * * $brewmaster_home/bin/brewmaster.py") | crontab -
 	fi
 
 }
@@ -181,14 +167,18 @@ if [ $(id -u) -eq 0 ]; then
 fi
 
 echo "Running install..."
-echo "Installing Homebrew if it isn't installed..."
-install_homebrew
 
 echo "Installing command line developer utilities if they aren't installed..."
 install_xcodeTools
+
+echo "Installing Homebrew if it isn't installed..."
+install_homebrew
+
 
 get_config
 
 echo "FINALLY!"
 echo "Installing Brewmaster!"
 install_brewmaster
+
+exit 0
