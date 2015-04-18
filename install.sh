@@ -141,6 +141,7 @@ function install_brewmaster()
 	
 	mkdir -p "$brewmaster_home/bin"
 	cp bin/brewmaster.sh "$brewmaster_home/bin"
+	cp bin/get_yaml.rb "$brewmaster_home/bin"
 
 	if [ $SYS == "Darwin" ]; then
 		cp com.bjschafer.brewmaster.plist $HOME/Library/LaunchAgents
@@ -152,7 +153,7 @@ function install_brewmaster()
 		fi
 	else
 		if [ $config_type == "http" ] || [ $config_type == "git" ]; then
-			cat <(crontab -l) <(echo "12 30 * * * $brewmaster_home/bin/brewmaster.py") | crontab -
+			cat <(crontab -l) <(echo "$( RANDOM % 24 ) $( RANDOM % 60 ) * * * $brewmaster_home/bin/brewmaster.py") | crontab -
 		fi
 
 
