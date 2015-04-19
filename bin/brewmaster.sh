@@ -57,8 +57,8 @@ installer()
 startup()
 {
 	if [[ $# -eq 0 ]] ; then
-    	echo "Usage: ./brewmaster.sh config.yaml"
-    	exit 1
+    		echo "Usage: ./brewmaster.sh config.yaml"
+    		exit 1
 	fi
 	if [ ! -e $config_file ]; then
 		echo "Invalid config file specified."

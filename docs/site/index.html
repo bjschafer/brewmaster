@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="./img/favicon.ico">
+
+	<title>My Docs</title>
+
+        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="./css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="./css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body class="homepage">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href=".">My Docs</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+
+            
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#brewmaster">Brewmaster</a></li>
+        
+            <li><a href="#installation">Installation</a></li>
+        
+            <li><a href="#yaml-file-format">YAML file format</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="brewmaster">Brewmaster</h1>
+<p>Brewmaster is a collection of scripts used to manage Homebrew on Mac from one unified config file.</p>
+<h2 id="installation">Installation</h2>
+<p>Have the path to your YAML config file handy - the installer will want it.  It will put it in <code>/usr/local/brewmaster/</code> on Mac or <code>~/.linuxbrew/brewmaster/</code> on Linux, as that directory belongs to Brewmaster.</p>
+<p>Then, you should just be able to run <code>./install.sh</code> and it'll figure itself out.</p>
+<h2 id="yaml-file-format">YAML file format</h2>
+<pre><code>---
+formulae:
+        - name: cask
+          version: 0.53.1
+          args: [arg1, arg2]
+
+        - name: wget
+          version: latest
+
+        - name: cmake
+          version: current
+...
+
+</code></pre>
+
+<p>Note that you can specify a specific version which will be <code>brew pin</code>ed, <code>latest</code> which always installs the latest version available, or <code>current</code>, which <code>brew pin</code>s whichever version is available currently.</p>
+<p>Right now the manual version specification isn't implemented, so I recommend using <code>current</code>.</p></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        
+
+        <script src="./js/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/highlight.pack.js"></script>
+        <script src="./js/base.js"></script>
+
+        <!--
+        MkDocs version  : 0.12.1
+        Docs Build Date : 2015-04-19 08:11:08.628008
+        -->
+    </body>
+</html>
