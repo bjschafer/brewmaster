@@ -17,9 +17,9 @@ OPTIND=1
 
 SYS=$(uname -s)
 
-if [ $SYS == "Darwin" ]; then
+if [ "$SYS" == "Darwin" ]; then
 	brewmaster_home="/usr/local/brewmaster"
-elif [ $SYS == "Linux" ]; then
+elif [ "$SYS" == "Linux" ]; then
 	brewmaster_home="$HOME/.linuxbrew/brewmaster"
 fi
 
@@ -28,9 +28,9 @@ function install_homebrew()
 	if hash brew 2>/dev/null; then
 		return 0
 	else
-		if [ $SYS == "Darwin" ]; then
+		if [ "$SYS" == "Darwin" ]; then
 			ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" # note this prompts the user
-		elif [ $SYS == "Linux" ]; then
+		elif [ "$SYS" == "Linux" ]; then
 			if hash ruby 2>/dev/null && hash gcc 2>/dev/null; then
 				ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)"
 			else
@@ -49,7 +49,7 @@ function install_xcodeTools()
 	if hash gcc 2>/dev/null; then
 		return 0
 	else
-		if [ $SYS == "Darwin" ]; then
+		if [ "$SYS" == "Darwin" ]; then
 			xcode-select --install
 		else
 			echo "Missing developer tools. Try a sudo apt-get install build-essential"
@@ -64,14 +64,14 @@ function find_local_config()
 
 		read -e -p "Please enter the path to the .yaml file: [$brewmaster_home/config.yaml]" config_location
 
-	if [ $config_location == "" ]; then
+	if [ "$config_location" == "" ]; then
 		config_location="$brewmaster_home/config.yaml"
 	fi
 
-	if [ ! -e $config_location ]; then
+	if [ ! -e "$config_location" ]; then
 		echo 
 		read -p "File not found. Please ensure the config file is there and you have permissions, then press enter to try again."
-		if [ ! -e $config_location ]; then
+		if [ ! -e "$config_location" ]; then
 			echo "File not found. Exiting."
 			exit 1
 		fi
@@ -100,7 +100,7 @@ function find_http_config()
 	read -e -p "Please enter the URL in the format http[s]://example.com/config.yaml: " url_repo
 
 	echo $config_location | grep -E -q 'http[s]?:\/\/([A-Za-z0-9]+\.)+[A-Za-z]+[\/\w\.\?=]*'
-	if [ $? -ne 0 ]; then # not a valid url
+	if [ "$?" -ne 0 ]; then # not a valid url
 		echo "Invalid URL. Try again."
 		find_http_config
 	fi
@@ -109,7 +109,7 @@ function find_http_config()
 	config_location="$brewmaster_home/config.yaml"
 
 	curl -output $config_location $url_repo
-	if [ $? -ne 0]; then # unable to access
+	if [ "$?" -ne 0]; then # unable to access
 		echo "Try again?"
 		find_http_config
 	fi
@@ -119,7 +119,7 @@ function find_http_config()
 
 function get_config()
 {
-	if [ $1 ]; then
+	if [ "$1" ]; then
 		source $1
 	else
 		# Guess we have to do this the hard way.
@@ -143,16 +143,16 @@ function install_brewmaster()
 	cp bin/brewmaster.sh "$brewmaster_home/bin"
 	cp bin/get_yaml.rb "$brewmaster_home/bin"
 
-	if [ $SYS == "Darwin" ]; then
+	if [ "$SYS" == "Darwin" ]; then
 		cp com.bjschafer.brewmaster.plist $HOME/Library/LaunchAgents
 		launchctl load $HOME/Library/LaunchAgents/com.bjschafer.brewmaster.plist
 
-		if [ $config_type == "http" ] || [ $config_type == "git" ]; then
-			cp com.bjschafer.brewmaster.sync.plist $HOME/Library/LaunchAgents
+		if [ "$config_type" == "http" ] || [ $config_type == "git" ]; then
+			cp com.bjschafer.brewmaster.sync.plist $HOME/Library/LaunchAgents/com.bjschafer.brewmaster.sync.plist
 			launchctl load $HOME/Library/LaunchAgents/com.bjschafer.brewmaster.sync.plist
 		fi
 	else
-		if [ $config_type == "http" ] || [ $config_type == "git" ]; then
+		if [ "$config_type" == "http" ] || [ $config_type == "git" ]; then
 			cat <(crontab -l) <(echo "$( RANDOM % 24 ) $( RANDOM % 60 ) * * * $brewmaster_home/bin/brewmaster.py") | crontab -
 		fi
 
