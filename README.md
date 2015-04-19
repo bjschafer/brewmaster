@@ -1,5 +1,7 @@
 [![Join the chat at https://gitter.im/bjschafer/brewmaster](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bjschafer/brewmaster?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Stories in Ready](https://badge.waffle.io/bjschafer/brewmaster.png?label=ready&title=Ready)](http://waffle.io/bjschafer/brewmaster)
+[![Documentation Status](https://readthedocs.org/projects/brewmaster/badge/?version=latest)](https://readthedocs.org/projects/brewmaster/?badge=latest)
+
 
 Brewmaster is still under heavy development! Don't use it unless you like broken things :)
 
