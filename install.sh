@@ -62,10 +62,10 @@ function find_local_config()
 {
 	config_type="local"
 
-		read -e -p "Please enter the path to the .yaml file: [$brewmaster_home/config.yaml]" config_location
+		read -e -p "Please enter the path to the .yaml file.  We'll copy it for you: [./sample.yaml]" config_location
 
 	if [ "$config_location" == "" ]; then
-		config_location="$brewmaster_home/config.yaml"
+		config_location="$(pwd)/sample.yaml"
 	fi
 
 	if [ ! -e "$config_location" ]; then
@@ -76,7 +76,6 @@ function find_local_config()
 			exit 1
 		fi
 	fi
-
 }
 
 # Guess we gotta create ANOTHER (?) scheduled task to keep it up to date?? Or just use the same one somehow?
@@ -137,11 +136,15 @@ function get_config()
 
 function install_brewmaster()
 {
-	sed -i -e "s,CONFIG_LOCATION,$config_location,g" com.bjschafer.brewmaster.plist
+	sed -i -e "s,CONFIG_LOCATION,$brewmaster_home/config.yaml,g" com.bjschafer.brewmaster.plist
 	
 	mkdir -p "$brewmaster_home/bin"
 	cp bin/brewmaster.sh "$brewmaster_home/bin"
 	cp bin/get_yaml.rb "$brewmaster_home/bin"
+
+	if [ "$config_type" == "local" ]; then
+		cp $config_location $brewmaster_home/config.yaml
+	fi
 
 	if [ "$SYS" == "Darwin" ]; then
 		cp com.bjschafer.brewmaster.plist $HOME/Library/LaunchAgents
