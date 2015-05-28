@@ -1,4 +1,7 @@
 ---
+config:
+		- config_type: CONFIG_TYPE
+		- config_location: CONFIG_LOCATION
 formulae: 
         - name: cask
           version: 0.53.1

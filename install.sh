@@ -21,6 +21,9 @@ if [ "$SYS" == "Darwin" ]; then
 	brewmaster_home="/usr/local/brewmaster"
 elif [ "$SYS" == "Linux" ]; then
 	brewmaster_home="$HOME/.linuxbrew/brewmaster"
+else
+	echo "Your system wasn't recognized. If it does run Brew, file a bug report!"
+	exit 2
 fi
 
 function install_homebrew()

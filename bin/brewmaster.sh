@@ -3,7 +3,7 @@
 #
 # Manages installed software using Homebrew.
 # 
-# Usage: ./brewmaster.sh /path/to/config.yaml
+#     Usage: ./brewmaster.sh /path/to/config.yaml
 #
 #  Homepage: http://bjschafer.github.io/brewmaster
 #
@@ -16,7 +16,7 @@ OPTIND=1
 yaml_parser="$(pwd)/get_yaml.rb"
 config_file=$1
 
-call_brew()
+function call_brew()
 {
 	brew $1 >/dev/null 2>&1
 
@@ -27,7 +27,7 @@ call_brew()
 	fi
 }
 
-format_brew()
+function format_brew()
 {
 	if [ $version == "current" ]; then
 		call_brew "install $name $args"
@@ -41,7 +41,7 @@ format_brew()
 	fi
 }
 
-installer()
+function installer()
 {
 	formula_count=$(ruby $yaml_parser $config_file)-1 # TODO: Check this
 
@@ -54,7 +54,21 @@ installer()
 	done
 }
 
-startup()
+function config_updater()
+{
+	config_type="$(ruby $yaml_parser $config_file) config type"
+	config_location="$(ruby $yaml_parser $config_file) config location"
+
+	if [ "$config_type" == "git" ]; then
+		cd $(dirname $config_location)
+		git pull
+		cd - # this needs to change
+	elif [ "$config_type" == "http" ]; then 
+		curl -output -silent $config_file $config_location
+	fi
+}
+
+function startup()
 {
 	if [[ $# -eq 0 ]] ; then
     		echo "Usage: ./brewmaster.sh config.yaml"
@@ -65,7 +79,7 @@ startup()
 		exit 1
 	fi
 	call_brew update # do I need quotes?
-	call_brew upgrade
+	call_brew upgrade --all
 }
 
 startup

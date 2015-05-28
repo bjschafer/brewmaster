@@ -16,7 +16,7 @@ But seriously, Homebrew is a fantastic thing. Why shouldn't enterprises or peopl
 
 Installation
 ------------
-Have the path to your YAML config file handy - the installer will want it.  You may want to put it in `/usr/local/brewmaster/` on Mac or `~/.linuxbrew/brewmaster/` on Linux, as that directory belongs to Brewmaster.
+Have the path to your YAML config file handy - the installer will want it.  It will put it in `/usr/local/brewmaster/` on Mac or `~/.linuxbrew/brewmaster/` on Linux, as that directory belongs to Brewmaster.
 
 Then, you should just be able to run `./install.sh` and it'll figure itself out.
 
